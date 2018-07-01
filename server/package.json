@@ -1,0 +1,8 @@
+{
+  "name": "wallet-watcher-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/wallet-watcher/wallet-watcher.git",
+  "author": "Jeremy A. Jones, Justin Kaseman, Yasin Shuman, Troy Williams, Edward Manda",
+  "license": "MIT"
+}

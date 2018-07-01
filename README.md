@@ -1,0 +1,1 @@
+Wallet Watcher is an app that allows a user to monitor any Ethereum address. Depending on the transaction criteria set, the system will send an SMS message to the user. Wallet Watcher provides a way to monitor activity without being tied to a computer.
