@@ -4,5 +4,10 @@
   "main": "server.js",
   "repository": "https://github.com/wallet-watcher/wallet-watcher.git",
   "author": "Jeremy A. Jones, Justin Kaseman, Yasin Shuman, Troy Williams, Edward Manda",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "helmet": "^3.12.1"
+  }
 }
