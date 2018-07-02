@@ -1,3 +1,8 @@
+//auth twilio client
+var authToken = "d495fdae5d1bf3d80b53e680480fc8b3";
+const accountSid = "AC6f11471cb18f487bb1f4a6c6df9e1ff3";
+const client = require("twilio")(accountSid, authToken);
+
 // TODO: check address valid
 /* TODO: 
 
@@ -6,11 +11,6 @@
 3. send text to number stored in db
 
 */
-
-// var authToken = "bring in token";
-// const accountSid = "SID";
-// const client = require("twilio")(accountSid, authToken);
-// const fromSms = "use number";
 
 // function sendSMS(text, toSms, fromSms) {
 //   return client.messages

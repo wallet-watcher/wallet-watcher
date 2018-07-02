@@ -8,6 +8,7 @@
   "dependencies": {
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "helmet": "^3.12.1"
+    "helmet": "^3.12.1",
+    "twilio": "^3.17.4"
   }
 }
