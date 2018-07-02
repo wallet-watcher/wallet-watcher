@@ -40,6 +40,6 @@ function validateAddress(oneAddress) {
     });
 }
 
-validateAddress("jhjgfwjggj").then(response => {
+validateAddress("0xe2213989f81eeefc8c3577554083c8b6b8a1032c").then(response => {
   console.log(response);
 });
