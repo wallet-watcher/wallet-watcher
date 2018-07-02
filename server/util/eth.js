@@ -22,25 +22,24 @@ function getBal(addressArray) {
     });
 }
 
-async function validateAddress(oneAddress) {
+function validateAddress(oneAddress) {
   let URL = etherScan.etherScanSingleURL + oneAddress + etherScan.etherScanURL2;
-  let isGood = null;
-  await axios
+
+  return axios
     .get(URL)
     .then(function(response) {
       console.log(response.data.status);
       if (response.data.status == 0) {
-        isGood = false;
+        return false;
       } else if (response.data.status == 1) {
-        isGood = true;
+        return true;
       }
     })
     .catch(err => {
       console.log(err);
     });
-  return isGood;
 }
 
-let vvvv = validateAddress("0xe2213989f81eeefc8c3577554083c8b6b8a1032c");
-console.log(vvvv);
-// getBal(addressArray);
+validateAddress("jhjgfwjggj").then(response => {
+  console.log(response);
+});
