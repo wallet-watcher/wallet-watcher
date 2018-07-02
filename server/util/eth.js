@@ -1,12 +1,5 @@
-const axios = require("axios");
-const etherScan = require("../config/etherscanConfig");
-// let URL = etherScan.etherScanURL + address + etherScan.etherScanURL2;
-
-const addressArray = [
-  "00000",
-  "0xe2213989f81eeefc8c3577554083c8b6b8a1032c",
-  "0xe2213989f81eeefc8c3577554083c8b6b8a1032c"
-];
+const axios = require('axios');
+const etherScan = require('../config/etherscanConfig');
 
 function getBal(addressArray) {
   console.log(String(addressArray));
@@ -40,6 +33,11 @@ function validateAddress(oneAddress) {
     });
 }
 
-validateAddress("jhjgfwjggj").then(response => {
-  console.log(response);
-});
+// validateAddress('0xe2213989f81eeefc8c3577554083c8b6b8a1032c').then(response => {
+//   console.log(response);
+// });
+
+module.exports = {
+  getBal,
+  validateAddress
+};
