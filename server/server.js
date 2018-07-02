@@ -1,0 +1,6 @@
+/* 
+have a polling feature which polls each wallet for a change once every second 
+later we will have to change this so we dont get rate limited by the api 
+or build our pown off of our own node
+
+*/

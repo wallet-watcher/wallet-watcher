@@ -38,6 +38,7 @@ _testmain.go
 .DS_Store
 
 #other
+config/
 node_modules/
 bower_components/
 .tmp
