@@ -28,16 +28,18 @@ function validateAddress(oneAddress) {
   axios
     .get(URL)
     .then(response => {
-      // if (response.data.status != 0) {
-      //   return (bool = true);
-      // } else return (bool = false);
+      console.log(response.data.status);
+      if ((response.data.status = 0)) {
+        return false;
+      } else if ((response.data.status = 1)) {
+        return true;
+      }
     })
     .catch(err => {
-      if ((err.status = 0)) {
-        console.log(err.result);
-      }
       console.log(err);
     });
 }
-validateAddress("222");
+if (validateAddress("0xe2213989f81eeefc8c3577554083c8b6b8a1032c")) {
+  console.log("this is true");
+} else console.log("this is false");
 // getBal(addressArray);
