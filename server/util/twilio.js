@@ -27,9 +27,9 @@ function sendDecreaseSMS(address, walletBalance, transAmount, toSms, fromSms) {
     .then(message => console.log(message.sid));
 }
 
-sendIncreaseSMS(text, toSms, fromSms);
+sendIncreaseSMS(address, walletBalance, transAmount, toSms, fromSms);
 
-sendDecreaseSMS(text, toSms, fromSms);
+sendDecreaseSMS(address, walletBalance, transAmount, toSms, fromSms);
 
 module.exports = {
   sendIncreaseSMS,
