@@ -27,16 +27,20 @@ export const Form = styled.form`
 export const FormGroup = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   max-width: 500px;
   label {
     margin-right: 1rem;
   }
 
   input {
-    width: 200px;
+    width: 210px;
     margin-bottom: 1rem;
     height: 30px;
     font-size: 1.1rem;
+    border-radius: 10px;
+    border: 1px solid gray;
+    padding: 0.2rem 1rem;
   }
 `;
 
