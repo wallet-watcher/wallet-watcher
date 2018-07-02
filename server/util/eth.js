@@ -24,39 +24,23 @@ function getBal(addressArray) {
 
 async function validateAddress(oneAddress) {
   let URL = etherScan.etherScanSingleURL + oneAddress + etherScan.etherScanURL2;
-  let isItGood = true;
-  try {
-    let response = await axios.get(URL);
-    // let resCode = response.data.status;
-    // console.log(resCode);
-    if (response.status == 200) {
+  let isGood = null;
+  await axios
+    .get(URL)
+    .then(function(response) {
+      console.log(response.data.status);
       if (response.data.status == 0) {
-        console.log("bad address");
-        isItGood = false;
+        isGood = false;
       } else if (response.data.status == 1) {
-        console.log("good address");
-        isItGood = true;
+        isGood = true;
       }
-      return isItGood;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-
-  //   if (resCode === 0) {
-  //     console.log("bad address");
-  //     return false;
-  //   } else if (resCode === 1) {
-  //     console.log("good address");
-  //     return true;
-  //   }
-  // })
-  // .catch(err => {
-  //   console.log(err);
-  // });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  return isGood;
 }
 
-let ggg = validateAddress("0xe2213989f81eeefc8c3577554083c8b6b8a1032c");
-
-console.log(ggg == true);
+let vvvv = validateAddress("0xe2213989f81eeefc8c3577554083c8b6b8a1032c");
+console.log(vvvv);
 // getBal(addressArray);
