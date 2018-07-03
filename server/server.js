@@ -64,7 +64,47 @@ app.post('/', (req, res) => {
   }
 });
 
-// check balance
+setInterval(function() {
+  // 2d array initialized with empty arrays to hold 20 users per row (this is how many addresses the API request can handle at once)
+  // TODO: Calculate max amount of accounts
+  const activeUsers = Array(2).fill(null).map(()=>Array());
+    
+  User.find({})
+  .then(res => {
+    // populate the activeUsers with each users' address and balance from DB
+    let row = 0;
+    for (let i = 0; i < res.length; i++) {
+      if (activeUsers[row].length === 20) {
+        row++;
+      }
+      activeUsers[row].push([res[i].address, res[i].balance, res[i].incoming, res[i].outgoing, res[i].phone])
+    }
+    // hit end point with the 20 addresses in the row (1 second in between each request)
+    let time = 0;
+    for (let i = 0; i < activeUsers.length; i++) {
+          if (activeUsers[i].length){
+            setTimeout(() => {
+            getBal(activeUsers[i].map(user => user[0]))
+            .then(res => {
+              // check if any balances have changed
+              const oldBalances = activeUsers[i].map(user => user[1]);
+              for (let j = 0; j < res.length; j++) {
+                if (oldBalances[j] - res[j].balance < activeUsers[i][j][2]) {
+                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, transAmount, activeUsers[i][j][4])
+                } else if (oldBalances[j] - res[j].balance > activeUsers[i][j][3]){
+                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, transAmount, activeUsers[i][j][4])
+                }
+              }
+            })
+            .catch(err => console.log(err));
+          }, time)
+          time += 1000;
+          }
+      }
+
+      })
+      .catch(err => console.log(err))
+}, 10000);
 
 // opt out. web hook stop from twilio
 
