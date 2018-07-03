@@ -38,9 +38,14 @@ export const FormGroup = styled.div`
     margin-bottom: 1rem;
     height: 30px;
     font-size: 1.1rem;
-    border-radius: 10px;
-    border: 1px solid gray;
+    border-radius: 5px;
+    border: 0.5px solid #ccc;
     padding: 0.2rem 1rem;
+    box-shadow: 0px 0px 0px 1px #fff inset;
+  }
+
+  .HasError {
+    border: 1px solid red;
   }
 `;
 
@@ -50,10 +55,23 @@ export const Button = styled.button`
   background-color: #ee6352;
   color: #fff;
   border-radius: 10px;
-  width: 150px;
+  width: 200px;
+  height: 40px;
 
   :hover {
     background-color: #c62a17;
     cursor: pointer;
   }
+`;
+
+export const Err = styled.div`
+  display: ${props => (props.errors === true ? 'flex' : 'none')};
+  justify-content: center;
+  align-items: center;
+  color: red;
+  font-weight: 500;
+  width: 250px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid red;
 `;
