@@ -17,7 +17,7 @@ function sendWelcomeSMS(address, toSms) {
 
   return client.messages
     .create({
-      body: `\nYou are now montioring address: ${address} \n `,
+      body: `\nYou are now monitoring address: ${address} \n `,
       to: toSms, // Text this number
       from: fromSms // From a valid Twilio number
     })
@@ -27,7 +27,7 @@ function sendWelcomeSMS(address, toSms) {
 function sendDecreaseSMS(address, walletBalance, transAmount, toSms) {
   return client.messages
     .create({
-      body: `\nALERT: ${address} \n Has Increased by ${transAmount}. Balance is now: ${walletBalance}`,
+      body: `\nALERT: ${address} \n Has Decreased by ${transAmount}. Balance is now: ${walletBalance}`,
       to: toSms, // Text this number
       from: fromSms // From a valid Twilio number
     })

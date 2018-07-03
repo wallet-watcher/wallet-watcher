@@ -25,10 +25,11 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
   const { address, phone, incoming, outgoing } = req.body;
+  console.log(req.body);
   if (!address || !phone || !incoming || !outgoing) {
     res
       .status(422)
-      .json({ msg: 'missing address, phone, incomign, or outgoing' });
+      .json({ msg: 'missing address, phone, incoming, or outgoing' });
   } else {
     validateAddress(address)
       .then(valid => {
@@ -44,7 +45,7 @@ app.post('/', (req, res) => {
               })
                 .then(user => {
                   // sendWelcomeSMS(address, user.phone);
-
+                  console.log('SMS!')
                   res.send(user);
                 })
                 .catch(err => {
@@ -71,6 +72,7 @@ setInterval(function() {
     
   User.find({})
   .then(res => {
+    console.log(res)
     // populate the activeUsers with each users' address and balance from DB
     let row = 0;
     for (let i = 0; i < res.length; i++) {
@@ -90,9 +92,13 @@ setInterval(function() {
               const oldBalances = activeUsers[i].map(user => user[1]);
               for (let j = 0; j < res.length; j++) {
                 if (oldBalances[j] - res[j].balance < activeUsers[i][j][2]) {
-                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, transAmount, activeUsers[i][j][4])
+                  // User.findById({}).decrement();
+                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, oldBalances[j] - res[j].balance, activeUsers[i][j][4])
+                  console.log('SMS!')
                 } else if (oldBalances[j] - res[j].balance > activeUsers[i][j][3]){
-                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, transAmount, activeUsers[i][j][4])
+                  // User.findById({}).decrement();
+                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, oldBalances[j] - res[j].balance, activeUsers[i][j][4])
+                  console.log('SMS!')
                 }
               }
             })
