@@ -16,12 +16,6 @@ export const Intro = styled.div`
   justify-content: center;
 `;
 
-export const Chart = styled.iframe`
-  width: 600px;
-  height: 125px;
-  background: #eee;
-`;
-
 export const Form = styled.form`
   margin: 1rem auto;
 `;
@@ -35,17 +29,6 @@ export const FormGroup = styled.div`
     margin-right: 1rem;
   }
 
-  input {
-    width: 250px;
-    margin-bottom: 1rem;
-    height: 30px;
-    font-size: 1.1rem;
-    border-radius: 5px;
-    border: 0.5px solid #ccc;
-    padding: 0.2rem 1rem;
-    box-shadow: 0px 0px 0px 1px #fff inset;
-  }
-
   .HasError {
     border: 1px solid red;
   }
@@ -57,11 +40,12 @@ export const Button = styled.button`
   background-color: #47c8c7;
   color: #fff;
   border-radius: 10px;
+  border-color: #d60d90;
   width: 200px;
   height: 40px;
 
   :hover {
-    background-color: #c62a17;
+    background-color: #d60d90;
     cursor: pointer;
   }
 `;
