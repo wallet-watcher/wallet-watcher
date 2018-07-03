@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:600');
+
+body {
+  background: #0d1f2c;
+  color: white;
+}
+
+.wallet-watcher-header {
+  font-family: 'Raleway', sans-serif;
+  font-size: 4em;
+  color: #47c8c7;
+}
+
+.sub-text {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.1em;
+  text-align: center;
+}
