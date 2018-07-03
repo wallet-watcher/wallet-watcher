@@ -91,9 +91,10 @@ class App extends Component {
       if (inputErrors[keys[i]]) {
         // found an error so break
         this.setState({ foundErrors: true, validInputs: inputErrors });
-        break;
+        return false;
       }
     }
+    return true; // valid data
   };
   inputChangeHandler = ({ target }) => {
     this.setState({
@@ -102,9 +103,23 @@ class App extends Component {
     });
   };
 
+  // axios
+  post = data => {
+    console.log(data);
+  };
+
   submitHandler = e => {
     e.preventDefault();
-    this.validate(); // validate the inputs
+    const res = this.validate(); // validate the inputs
+    if (res) {
+      const data = {
+        address: this.state.address,
+        phone: this.state.phone,
+        incoming: this.state.incoming,
+        outgoing: this.state.outgoing,
+      };
+      this.post(data);
+    }
   };
   render() {
     return (
@@ -137,6 +152,12 @@ class App extends Component {
               id="address"
               name="address"
               value={this.state.address}
+              onFocus={() => {
+                const validInputs = this.state.validInputs;
+                // reset the error
+                validInputs.address = false;
+                this.setState({ foundErrors: false, validInputs });
+              }}
               onChange={this.inputChangeHandler}
               placeholder="0x..."
               autoComplete="false"
@@ -152,7 +173,7 @@ class App extends Component {
               onChange={this.inputChangeHandler}
               className={this.state.validInputs.phone ? 'HasError' : null}
               placeholder="(xxx)-xxx-xxxx"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              //pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               autoComplete="false"
               required
             />
