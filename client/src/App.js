@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Wrapper, Form, Intro, FormGroup, Button } from './AppCss';
+import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -7,15 +8,15 @@ class App extends Component {
   state = {
     address: '',
     phone: '',
-    incoming: '0.000',
-    outgoing: '0.000',
+    incoming: '',
+    outgoing: '',
     validInputs: {
       address: true,
       phone: true,
       incoming: true,
-      outgoing: true,
+      outgoing: true
     },
-    noErrors: true,
+    noErrors: true
   };
 
   validateAddress = () => {
@@ -47,25 +48,23 @@ class App extends Component {
 
   validateIncoming = () => {
     // check if its a number
-    if (isNaN(this.state.incoming) || !this.state.incoming) {
+    if (isNaN(this.state.incoming)) {
       return false;
     }
-
     // check if number is less than 0.001
-
     if (
       Number(this.state.incoming) >= 0.001 ||
-      Number(this.state.incoming) === 0
+      Number(this.state.incoming) === 0 ||
+      this.state.incoming === ''
     ) {
       return true;
     } else {
       return false;
     }
   };
-
   validateOutgoing = () => {
     // check if its a number
-    if (isNaN(this.state.outgoing) || !this.state.outgoing) {
+    if (isNaN(this.state.outgoing)) {
       return false;
     }
 
@@ -73,7 +72,8 @@ class App extends Component {
 
     if (
       Number(this.state.outgoing) >= 0.001 ||
-      Number(this.state.outgoing) === 0
+      Number(this.state.outgoing) === 0 ||
+      this.state.outgoing === ''
     ) {
       return true;
     } else {
@@ -120,7 +120,7 @@ class App extends Component {
   inputChangeHandler = ({ target }) => {
     this.setState({
       ...this.state,
-      [target.name]: target.value,
+      [target.name]: target.value
     });
   };
 
@@ -128,21 +128,42 @@ class App extends Component {
     return <div className="HasError">Invalid {entry}</div>;
   };
 
-  // axios
   post = data => {
-    console.log(data);
+    const processedPostData = Object.assign({}, data);
+    // 3 decimal places for incoming
+    if (Number(data.incoming) === 0 || data.incoming === '') {
+      processedPostData.incoming = 0.001;
+    } else {
+      processedPostData.incoming = Number(processedPostData.incoming).toFixed(
+        3
+      );
+    }
+    // 3 decimal places for outgoing
+    if (Number(data.outgoing) === 0 || data.outgoing === '') {
+      processedPostData.outgoing = 0.001;
+    } else {
+      processedPostData.outgoing = Number(processedPostData.outgoing).toFixed(
+        3
+      );
+    }
+
+    axios
+      .post('http://localhost:8000', processedPostData)
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
+    console.log(processedPostData);
     this.setState({
       address: '',
       phone: '',
-      incoming: '0.000',
-      outgoing: '0.000',
+      incoming: '',
+      outgoing: '',
       validInputs: {
         address: true,
         phone: true,
         incoming: true,
-        outgoing: true,
+        outgoing: true
       },
-      noErrors: true,
+      noErrors: true
     });
   };
 
@@ -154,7 +175,7 @@ class App extends Component {
         address: this.state.address,
         phone: this.state.phone,
         incoming: this.state.incoming,
-        outgoing: this.state.outgoing,
+        outgoing: this.state.outgoing
       };
       this.post(data);
     }
@@ -184,12 +205,12 @@ class App extends Component {
               id="address"
               name="address"
               value={this.state.address}
-              // onFocus={() => {
-              //   const validInputs = this.state.validInputs;
-              //   // reset the error
-              //   validInputs.address = true;
-              //   this.setState({ noErrors: true, validInputs });
-              // }}
+              onFocus={() => {
+                const validInputs = this.state.validInputs;
+                // reset the error
+                validInputs.address = true;
+                this.setState({ noErrors: true, validInputs });
+              }}
               onChange={this.inputChangeHandler}
               placeholder="0x..."
               autoComplete="false"
@@ -212,12 +233,12 @@ class App extends Component {
               placeholder="(xxx)-xxx-xxxx"
               //pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               autoComplete="false"
-              // onFocus={() => {
-              //   const validInputs = this.state.validInputs;
-              //   // reset the error
-              //   validInputs.phone = true;
-              //   this.setState({ noErrors: true, validInputs });
-              // }}
+              onFocus={() => {
+                const validInputs = this.state.validInputs;
+                // reset the error
+                validInputs.phone = true;
+                this.setState({ noErrors: true, validInputs });
+              }}
             />
           </FormGroup>
           <div>
@@ -233,13 +254,13 @@ class App extends Component {
               value={this.state.incoming}
               onChange={this.inputChangeHandler}
               // className={this.state.validInputs.incoming ? null : 'HasError'}
-              placeholder="0.000 ETH"
-              // onFocus={() => {
-              //   const validInputs = this.state.validInputs;
-              //   // reset the error
-              //   validInputs.incoming = true;
-              //   this.setState({ noErrors: true, validInputs });
-              // }}
+              placeholder="0.001 ETH"
+              onFocus={() => {
+                const validInputs = this.state.validInputs;
+                // reset the error
+                validInputs.incoming = true;
+                this.setState({ noErrors: true, validInputs });
+              }}
             />
           </FormGroup>
           <div>
@@ -255,13 +276,13 @@ class App extends Component {
               value={this.state.outgoing}
               onChange={this.inputChangeHandler}
               // className={this.state.validInputs.outgoing ? null : 'HasError'}
-              placeholder="0.000 ETH"
-              // onFocus={() => {
-              //   const validInputs = this.state.validInputs;
-              //   // reset the error
-              //   validInputs.outgoing = true;
-              //   this.setState({ noErrors: true, validInputs });
-              // }}
+              placeholder="0.001 ETH"
+              onFocus={() => {
+                const validInputs = this.state.validInputs;
+                // reset the error
+                validInputs.outgoing = true;
+                this.setState({ noErrors: true, validInputs });
+              }}
             />
           </FormGroup>
           <div>
