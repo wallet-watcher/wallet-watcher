@@ -1,5 +1,5 @@
-const twilio = require('../config/twilioConfig');
-const client = require('twilio')(twilio.accountSid, twilio.authToken);
+const twilio = require("../config/twilioConfig");
+const client = require("twilio")(twilio.accountSid, twilio.authToken);
 
 const { fromSms } = twilio;
 
@@ -12,7 +12,9 @@ function sendIncreaseSMS(address, walletBalance, transAmount, toSms) {
     })
     .then(message => console.log(message.sid));
 }
+
 function sendWelcomeSMS(address, toSms) {
+
   return client.messages
     .create({
       body: `\nYou are now montioring address: ${address} \n `,

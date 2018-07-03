@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { Wrapper, Form, Chart, Intro, FormGroup, Button, Err } from './AppCss';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
+import { Wrapper, Form, Intro, FormGroup, Button, Err } from './AppCss';
 
-// const CREATE_USER = gql`
-//   mutation createUser($type: )
-// `
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   state = {
@@ -160,28 +156,21 @@ class App extends Component {
     return (
       <Wrapper>
         <Intro>
-          <h2>Wallet Watcher</h2>
-          <p>
-            This is a web app that allows a user to monitor any ETH address
-            depending on the transaction criteria set:
-          </p>
-          <ul>
-            <li>the system will send an SMS message to the user.</li>
-            <li>
-              Wallet Watcher provides a way to monitor activity without being
-              tied to a computer.
-            </li>
-          </ul>
+          <div className="wallet-watcher-header mt-4">WalletWatcher</div>
+          <div className="sub-text mb-4">
+            Monitor any ETH address & receive SMS messages on the go.
+          </div>
         </Intro>
-        <Chart
+        <iframe
+          className="chart mb-3"
           id="widget-ticker-preview"
           src="//www.coingecko.com/en/widget_component/ticker/ethereum/usd?id=ethereum"
           scrolling="no"
-          frameborder="0"
         />
+
         <Form onSubmit={this.submitHandler}>
           <FormGroup>
-            <label htmlFor="address">Enter your ETH. Address:</label>
+            <label htmlFor="address">Ethereum Address</label>
             <input
               className={this.state.validInputs.address ? 'HasError' : null}
               id="address"
@@ -199,7 +188,7 @@ class App extends Component {
             />
           </FormGroup>
           <FormGroup>
-            <label htmlFor="phone">Enter your phone #:</label>
+            <label htmlFor="phone">Phone Number</label>
             <input
               type="tel"
               id="phone"
@@ -214,7 +203,7 @@ class App extends Component {
             />
           </FormGroup>
           <FormGroup>
-            <label htmlFor="incoming">Incoming amount to receive text: </label>
+            <label htmlFor="incoming">Incoming Transaction Limit</label>
             <input
               id="incoming"
               name="incoming"
@@ -225,7 +214,7 @@ class App extends Component {
             />
           </FormGroup>
           <FormGroup>
-            <label htmlFor="outgoing">Outgoing amount to receive text:</label>
+            <label htmlFor="outgoing">Outgoing Transaction Limit</label>
             <input
               id="outgoing"
               name="outgoing"
@@ -236,10 +225,10 @@ class App extends Component {
             />
           </FormGroup>
           <FormGroup>
-            <Button>Submit</Button>
             <Err errors={this.state.foundErrors}>Fix the errors!</Err>
           </FormGroup>
         </Form>
+        <Button>Track</Button>
       </Wrapper>
     );
   }
