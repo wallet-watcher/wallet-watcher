@@ -1,92 +1,80 @@
-// const mongoose = require('mongoose');
-const { MongoClient, ObjectId } = require('mongodb');
 const express = require('express');
-const bodyParser = require('body-parser');
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
-const { makeExecutableSchema } = require('graphql-tools');
 const cors = require('cors');
-const typeDefs = require('./schema/schema');
-const resolvers = require('./resolvers/resolvers');
+const helmet = require('helmet');
+const mongoose = require('mongoose');
+const User = require('./db/user');
+const { getBal, validateAddress, getSingleBal } = require('./util/eth');
+const {
+  sendIncreaseSMS,
+  sendDecreaseSMS,
+  sendWelcomeSMS
+} = require('./util/twilio');
 
+const PORT = process.env.PORT || 8000;
 const app = express();
-const PORT = 8000;
-const URL = 'http://localhost';
 const MONGO_URL =
   process.env.MONGOLAB_URI || 'mongodb://localhost:27017/walletwatcher';
-const db = MongoClient.connect(MONGO_URL, { useNewUrlParser: true });
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers
-});
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(helmet());
+app.use(express.json());
 
-// The GraphQL endpoint
-app.use('/graphql', graphqlExpress({ schema }));
+app.get('/', (req, res) => {
+  res.send('ruuning ');
+});
 
-// GraphiQL, a visual editor for queries
-app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+app.post('/', (req, res) => {
+  const { address, phone, incoming, outgoing } = req.body;
+  if (!address || !phone || !incoming || !outgoing) {
+    res
+      .status(422)
+      .json({ msg: 'missing address, phone, incomign, or outgoing' });
+  } else {
+    validateAddress(address)
+      .then(valid => {
+        if (valid) {
+          getSingleBal(address)
+            .then(balance => {
+              User.create({
+                address,
+                phone,
+                incoming,
+                outgoing,
+                balance
+              })
+                .then(user => {
+                  // sendWelcomeSMS(address, user.phone);
 
-app.get('/', (req, res) => res.send('hello world'));
+                  res.send(user);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          res.status(422).json({ msg: 'address not valid' });
+        }
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  }
+});
 
-// Function that converts mongo objectID to a string
-const prepare = o => {
-  o._id = o._id.toString();
-  return o;
-};
+// check balance
 
-// const start = async () => {
-//   try {
-//     // TODO: MONGODB
-//     const db = await MongoClient.connect(MONGO_URL)
-//
-//     const Users = db.collection('users')
-//
-//     // TODO: MONGOOSE
-//     // mongoose.connect(MONGO_URL)
-//     // const db = mongoose.connection;
-//     // db.on('error', ()=> {console.log( '---FAILED to connect to mongoose')})
-//     // db.once('open', () => {
-//     //   console.log( '+++Connected to mongoose')
-//     // })
-//
-//     // TODO: Functions here
-//     //
-//     //
-//
-//     // Put together a schema
-//     const schema = makeExecutableSchema({
-//       typeDefs,
-//       resolvers
-//     });
-//
-//     // Initialize the app
-//     // const app = express();
-//     app.use(cors())
-//
-//     // The GraphQL endpoint
-//     app.use("/graphql", bodyParser.json(), graphqlExpress({ schema }));
-//
-//     // GraphiQL, a visual editor for queries
-//     app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
-//
-//     // Start the server
-//     app.listen(PORT, () => {
-//       console.log(`Visit ${URL}:${PORT}/graphiql`);
-//     });
-//   } catch (e) {
-//     console.log(e)
-//   }
-// }
-// start();
+// opt out. web hook stop from twilio
 
-db
+mongoose
+  .connect(MONGO_URL)
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Visit ${URL}:${PORT}/graphiql`);
+      console.log(`running on port ${PORT}`);
     });
   })
   .catch(err => {
-    console.log('error connecting to mongodb');
+    console.log('Error connecting to mongodb');
   });

@@ -1,9 +1,9 @@
 const twilio = require("../config/twilioConfig");
 const client = require("twilio")(twilio.accountSid, twilio.authToken);
 
-const fromSms = twilio.fromSms;
+const { fromSms } = twilio;
 
-function sendIncreaseSMS(address, walletBalance, transAmount, toSms, fromSms) {
+function sendIncreaseSMS(address, walletBalance, transAmount, toSms) {
   return client.messages
     .create({
       body: `\nALERT: ${address} \n Has Increased by ${transAmount}. Balance is now: ${walletBalance}`,
@@ -12,7 +12,9 @@ function sendIncreaseSMS(address, walletBalance, transAmount, toSms, fromSms) {
     })
     .then(message => console.log(message.sid));
 }
-function sendWelcomeSMS(address, toSms, fromSms) {
+
+function sendWelcomeSMS(address, toSms) {
+
   return client.messages
     .create({
       body: `\nYou are now montioring address: ${address} \n `,
@@ -22,7 +24,7 @@ function sendWelcomeSMS(address, toSms, fromSms) {
     .then(message => console.log(message.sid));
 }
 
-function sendDecreaseSMS(address, walletBalance, transAmount, toSms, fromSms) {
+function sendDecreaseSMS(address, walletBalance, transAmount, toSms) {
   return client.messages
     .create({
       body: `\nALERT: ${address} \n Has Increased by ${transAmount}. Balance is now: ${walletBalance}`,
