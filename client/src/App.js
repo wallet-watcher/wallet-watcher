@@ -28,7 +28,17 @@ class App extends Component {
 
   validatePhone = () => {
     // check if there 10 digits, numbers
-    let phoneNumber = Number(this.state.phone.split('-').join(''));
+    let phoneNumber = Number(
+      this.state.phone
+        .split(' ')
+        .join('')
+        .split('(')
+        .join('')
+        .split(')')
+        .join('')
+        .split('-')
+        .join('')
+    );
     if (isNaN(phoneNumber) || phoneNumber.toString().length !== 10) {
       return false;
     }
