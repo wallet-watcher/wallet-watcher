@@ -1,23 +1,35 @@
 import React, { Component } from 'react';
 import { Wrapper, Form, Chart, Intro, FormGroup, Button, Err } from './AppCss';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+
+// const CREATE_USER = gql`
+//   mutation createUser($type: )
+// `
 
 class App extends Component {
   state = {
     address: '',
     phone: '',
-    incoming: '',
-    outgoing: '',
+    incoming: '0.000',
+    outgoing: '0.000',
     validInputs: {
       address: false,
       phone: false,
       incoming: false,
-      outgoing: false,
+      outgoing: false
     },
-    foundErrors: false,
+    foundErrors: false
   };
 
   validateAddress = () => {
-    return this.state.address.substring(0, 2) !== '0x';
+    if (this.state.address.substring(0, 2) === '0x') {
+      if (this.state.address.length === 42) {
+        return false;
+      }
+    } else {
+      return true;
+    }
   };
 
   validatePhone = () => {
@@ -38,7 +50,12 @@ class App extends Component {
 
     // check if number is less than 0.001
 
-    if (Number(this.state.incoming) < 0.001) {
+    if (
+      Number(this.state.incoming) >= 0.001 ||
+      Number(this.state.incoming) === 0
+    ) {
+      return false;
+    } else {
       return true;
     }
 
@@ -46,7 +63,7 @@ class App extends Component {
   };
 
   validateOutgoing = () => {
-    let bool = false;
+    let bool = true;
     // check if its a number
     if (isNaN(this.state.outgoing) || !this.state.incoming) {
       return true;
@@ -54,7 +71,12 @@ class App extends Component {
 
     // check if number is less than 0.001
 
-    if (Number(this.state.outgoing) < 0.001) {
+    if (
+      Number(this.state.outgoing) >= 0.001 ||
+      Number(this.state.incoming) === 0
+    ) {
+      return false;
+    } else {
       return true;
     }
 
@@ -99,13 +121,26 @@ class App extends Component {
   inputChangeHandler = ({ target }) => {
     this.setState({
       ...this.state,
-      [target.name]: target.value,
+      [target.name]: target.value
     });
   };
 
   // axios
   post = data => {
     console.log(data);
+    this.setState({
+      address: '',
+      phone: '',
+      incoming: '0.000',
+      outgoing: '0.000',
+      validInputs: {
+        address: false,
+        phone: false,
+        incoming: false,
+        outgoing: false
+      },
+      foundErrors: false
+    });
   };
 
   submitHandler = e => {
@@ -116,7 +151,7 @@ class App extends Component {
         address: this.state.address,
         phone: this.state.phone,
         incoming: this.state.incoming,
-        outgoing: this.state.outgoing,
+        outgoing: this.state.outgoing
       };
       this.post(data);
     }
