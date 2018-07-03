@@ -10,4 +10,18 @@ const userSchema = new Schema({
   balance: { type: Number }
 });
 
+// TODO: Middleware to decrement and then delete self when counter === 0
+
+userSchema.methods.decrement = function(bal) {
+  this.balance = bal;
+  this.counter--;
+  if (this.counter <= 0) {
+    this.remove(function(err,removed){
+      console.log(err);
+    });
+  } else {
+    this.save();
+  }
+};
+
 module.exports = mongoose.model('User', userSchema);
