@@ -20,7 +20,7 @@ app.use(helmet());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('ruuning ');
+  res.send('running ');
 });
 
 app.post('/', (req, res) => {

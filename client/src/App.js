@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Wrapper, Form, Intro, FormGroup, Button, Center } from './AppCss';
+import { Wrapper, Form, Intro, FormGroup, Button} from './AppCss';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
