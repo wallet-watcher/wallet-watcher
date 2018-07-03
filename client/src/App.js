@@ -55,7 +55,7 @@ class App extends Component {
 
   validateOutgoing = () => {
     // check if its a number
-    if (isNaN(this.state.outgoing) || !this.state.incoming) {
+    if (isNaN(this.state.outgoing) || !this.state.outgoing) {
       return false;
     }
 
@@ -63,7 +63,7 @@ class App extends Component {
 
     if (
       Number(this.state.outgoing) >= 0.001 ||
-      Number(this.state.incoming) === 0
+      Number(this.state.outgoing) === 0
     ) {
       return true;
     } else {
