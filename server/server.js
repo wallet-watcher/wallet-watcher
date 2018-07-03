@@ -25,7 +25,6 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
   const { address, phone, incoming, outgoing } = req.body;
-  console.log(req.body);
   if (!address || !phone || !incoming || !outgoing) {
     res
       .status(422)
@@ -44,8 +43,7 @@ app.post('/', (req, res) => {
                 balance
               })
                 .then(user => {
-                  // sendWelcomeSMS(address, user.phone);
-                  console.log('SMS!')
+                  sendWelcomeSMS(address, user.phone);
                   res.send(user);
                 })
                 .catch(err => {
@@ -72,15 +70,15 @@ setInterval(function() {
     
   User.find({})
   .then(res => {
-    console.log(res)
     // populate the activeUsers with each users' address and balance from DB
     let row = 0;
     for (let i = 0; i < res.length; i++) {
       if (activeUsers[row].length === 20) {
         row++;
       }
-      activeUsers[row].push([res[i].address, res[i].balance, res[i].incoming, res[i].outgoing, res[i].phone])
+      activeUsers[row].push([res[i].address, res[i].balance, res[i].incoming, res[i].outgoing, res[i].phone, res[i]._id])
     }
+
     // hit end point with the 20 addresses in the row (1 second in between each request)
     let time = 0;
     for (let i = 0; i < activeUsers.length; i++) {
@@ -91,14 +89,24 @@ setInterval(function() {
               // check if any balances have changed
               const oldBalances = activeUsers[i].map(user => user[1]);
               for (let j = 0; j < res.length; j++) {
-                if (oldBalances[j] - res[j].balance < activeUsers[i][j][2]) {
-                  // User.findById({}).decrement();
-                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, oldBalances[j] - res[j].balance, activeUsers[i][j][4])
-                  console.log('SMS!')
+                if (res[j].balance - oldBalances[j] > activeUsers[i][j][2]) {
+                  User.findById(activeUsers[i][j][5]).then(user => {
+                    if (user !== null) {
+                      user.decrement(res[j].balance)
+                    } else {
+                      console.log('no users in db');
+                    }
+                  }).catch(err => console.log(err))
+                  sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, oldBalances[j] - res[j].balance, activeUsers[i][j][4])
                 } else if (oldBalances[j] - res[j].balance > activeUsers[i][j][3]){
-                  // User.findById({}).decrement();
-                  // sendIncreaseSMS(activeUsers[i][j][0], res[j].balance, oldBalances[j] - res[j].balance, activeUsers[i][j][4])
-                  console.log('SMS!')
+                  User.findById(activeUsers[i][j][5]).then(user => {
+                    if (user !== null) {
+                      user.decrement(res[j].balance)
+                    } else {
+                      console.log('no users in db');
+                    }
+                  }).catch(err => console.log(err))
+                  sendDecreaseSMS(activeUsers[i][j][0], res[j].balance, oldBalances[j] - res[j].balance, activeUsers[i][j][4])
                 }
               }
             })
@@ -110,7 +118,7 @@ setInterval(function() {
 
       })
       .catch(err => console.log(err))
-}, 10000);
+}, 2000);
 
 // opt out. web hook stop from twilio
 

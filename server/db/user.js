@@ -12,13 +12,15 @@ const userSchema = new Schema({
 
 // TODO: Middleware to decrement and then delete self when counter === 0
 
-userSchema.methods.decrement = function() {
-  console.log("HIT")
-  this.counter = this.counter--;
+userSchema.methods.decrement = function(bal) {
+  this.balance = bal;
+  this.counter--;
   if (this.counter <= 0) {
     this.remove(function(err,removed){
       console.log(err);
     });
+  } else {
+    this.save();
   }
 };
 
