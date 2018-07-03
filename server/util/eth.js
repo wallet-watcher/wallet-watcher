@@ -1,18 +1,36 @@
 const axios = require("axios");
 const etherScan = require("../config/etherscanConfig");
 
-function getBal(addressArray) {
-  console.log(String(addressArray));
+// function getBal(addressArray) {
+//   console.log(String(addressArray));
+//   let addresses = String(addressArray);
+//   let URL = etherScan.etherScanMultiURL + addresses + etherScan.etherScanURL2;
+//   axios
+//     .get(URL)
+//     .then(response => {
+//       console.log(response.data.result);
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// }
+
+async function getBal(addressArray) {
   let addresses = String(addressArray);
   let URL = etherScan.etherScanMultiURL + addresses + etherScan.etherScanURL2;
-  axios
-    .get(URL)
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(err => {
+    try {
+      const balance = await axios
+        .get(URL)
+        .then(response => {
+          return response.data.result;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      return balance;
+    } catch (err) {
       console.log(err);
-    });
+    }
 }
 
 async function getSingleBal(singleAddress) {
@@ -49,7 +67,6 @@ function validateAddress(oneAddress) {
       console.log(err);
     });
 }
-
 
 
 module.exports = {
