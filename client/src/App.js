@@ -13,9 +13,9 @@ class App extends Component {
       address: true,
       phone: true,
       incoming: true,
-      outgoing: true
+      outgoing: true,
     },
-    noErrors: true
+    noErrors: true,
   };
 
   validateAddress = () => {
@@ -110,7 +110,7 @@ class App extends Component {
   inputChangeHandler = ({ target }) => {
     this.setState({
       ...this.state,
-      [target.name]: target.value
+      [target.name]: target.value,
     });
   };
 
@@ -130,9 +130,9 @@ class App extends Component {
         address: true,
         phone: true,
         incoming: true,
-        outgoing: true
+        outgoing: true,
       },
-      noErrors: true
+      noErrors: true,
     });
   };
 
@@ -144,7 +144,7 @@ class App extends Component {
         address: this.state.address,
         phone: this.state.phone,
         incoming: this.state.incoming,
-        outgoing: this.state.outgoing
+        outgoing: this.state.outgoing,
       };
       this.post(data);
     }
@@ -211,7 +211,7 @@ class App extends Component {
             />
           </FormGroup>
           <div>
-            {this.state.validInputs.address
+            {this.state.validInputs.phone
               ? null
               : this.invalidFeedback('Number')}
           </div>
@@ -233,7 +233,7 @@ class App extends Component {
             />
           </FormGroup>
           <div>
-            {this.state.validInputs.address
+            {this.state.validInputs.incoming
               ? null
               : this.invalidFeedback('Amount')}
           </div>
@@ -255,7 +255,7 @@ class App extends Component {
             />
           </FormGroup>
           <div>
-            {this.state.validInputs.address
+            {this.state.validInputs.outgoing
               ? null
               : this.invalidFeedback('Amount')}
           </div>
