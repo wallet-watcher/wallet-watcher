@@ -36,6 +36,14 @@ input {
   box-shadow: 0px 0px 0px 1px #fff inset;
 }
 
+.HasError {
+  color: red;
+  font-size: 0.7rem;
+  text-align: right;
+  margin-left: 12rem;
+  margin-top: -1rem;
+}
+
 @media only screen and (max-width: 600px) {
   body {
     font-size: 0.8em;
@@ -56,5 +64,9 @@ input {
 
   input {
     width: 200px;
+  }
+
+  .HasError {
+    margin-left: 7rem;
   }
 }

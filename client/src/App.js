@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Wrapper, Form, Intro, FormGroup, Button, Err } from './AppCss';
+import { Wrapper, Form, Intro, FormGroup, Button } from './AppCss';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,21 +10,19 @@ class App extends Component {
     incoming: '0.000',
     outgoing: '0.000',
     validInputs: {
-      address: false,
-      phone: false,
-      incoming: false,
-      outgoing: false
+      address: true,
+      phone: true,
+      incoming: true,
+      outgoing: true
     },
-    foundErrors: false
+    noErrors: true
   };
 
   validateAddress = () => {
     if (this.state.address.substring(0, 2) === '0x') {
-      if (this.state.address.length === 42) {
-        return false;
-      }
-    } else {
       return true;
+    } else {
+      return false;
     }
   };
 
@@ -32,16 +30,15 @@ class App extends Component {
     // check if there 10 digits, numbers
     let phoneNumber = Number(this.state.phone.split('-').join(''));
     if (isNaN(phoneNumber) || phoneNumber.toString().length !== 10) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   };
 
   validateIncoming = () => {
-    let bool = false;
     // check if its a number
     if (isNaN(this.state.incoming) || !this.state.incoming) {
-      return true;
+      return false;
     }
 
     // check if number is less than 0.001
@@ -50,19 +47,16 @@ class App extends Component {
       Number(this.state.incoming) >= 0.001 ||
       Number(this.state.incoming) === 0
     ) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
-
-    return bool;
   };
 
   validateOutgoing = () => {
-    let bool = true;
     // check if its a number
     if (isNaN(this.state.outgoing) || !this.state.incoming) {
-      return true;
+      return false;
     }
 
     // check if number is less than 0.001
@@ -71,33 +65,30 @@ class App extends Component {
       Number(this.state.outgoing) >= 0.001 ||
       Number(this.state.incoming) === 0
     ) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
-
-    return bool;
   };
   validate = () => {
-    const inputErrors = Object.assign({}, this.state.validInputs);
+    const validateInput = Object.assign({}, this.state.validInputs);
 
     // get the keys
-    const keys = Object.keys(inputErrors);
-
+    const keys = Object.keys(validateInput);
     // loop through the keys to validate each input
     keys.forEach(key => {
       switch (key) {
         case 'address':
-          inputErrors[key] = this.validateAddress();
+          validateInput[key] = this.validateAddress();
           break;
         case 'phone':
-          inputErrors[key] = this.validatePhone();
+          validateInput[key] = this.validatePhone();
           break;
         case 'incoming':
-          inputErrors[key] = this.validateIncoming();
+          validateInput[key] = this.validateIncoming();
           break;
         case 'outgoing':
-          inputErrors[key] = this.validateOutgoing();
+          validateInput[key] = this.validateOutgoing();
           break;
         default:
           return;
@@ -106,19 +97,25 @@ class App extends Component {
 
     // now loop through the inputs and if any of them has an error, setState
     for (let i = 0; i < keys.length; i++) {
-      if (inputErrors[keys[i]]) {
+      if (validateInput[keys[i]]) {
+        // valid data
+      } else {
         // found an error so break
-        this.setState({ foundErrors: true, validInputs: inputErrors });
+        this.setState({ noErrors: false, validInputs: validateInput });
         return false;
       }
     }
-    return true; // valid data
+    return true;
   };
   inputChangeHandler = ({ target }) => {
     this.setState({
       ...this.state,
       [target.name]: target.value
     });
+  };
+
+  invalidFeedback = entry => {
+    return <div className="HasError">Invalid {entry}</div>;
   };
 
   // axios
@@ -130,12 +127,12 @@ class App extends Component {
       incoming: '0.000',
       outgoing: '0.000',
       validInputs: {
-        address: false,
-        phone: false,
-        incoming: false,
-        outgoing: false
+        address: true,
+        phone: true,
+        incoming: true,
+        outgoing: true
       },
-      foundErrors: false
+      noErrors: true
     });
   };
 
@@ -162,7 +159,8 @@ class App extends Component {
           </div>
         </Intro>
         <iframe
-          className="chart mb-3"
+          className="chart mb-5"
+          title="chartFrame"
           id="widget-ticker-preview"
           src="//www.coingecko.com/en/widget_component/ticker/ethereum/usd?id=ethereum"
           scrolling="no"
@@ -172,21 +170,26 @@ class App extends Component {
           <FormGroup>
             <label htmlFor="address">Ethereum Address</label>
             <input
-              className={this.state.validInputs.address ? 'HasError' : null}
+              // className={this.state.validInputs.address ? null : 'HasError'}
               id="address"
               name="address"
               value={this.state.address}
-              onFocus={() => {
-                const validInputs = this.state.validInputs;
-                // reset the error
-                validInputs.address = false;
-                this.setState({ foundErrors: false, validInputs });
-              }}
+              // onFocus={() => {
+              //   const validInputs = this.state.validInputs;
+              //   // reset the error
+              //   validInputs.address = true;
+              //   this.setState({ noErrors: true, validInputs });
+              // }}
               onChange={this.inputChangeHandler}
               placeholder="0x..."
               autoComplete="false"
             />
           </FormGroup>
+          <div>
+            {this.state.validInputs.address
+              ? null
+              : this.invalidFeedback('Address')}
+          </div>
           <FormGroup>
             <label htmlFor="phone">Phone Number</label>
             <input
@@ -195,13 +198,23 @@ class App extends Component {
               name="phone"
               value={this.state.phone}
               onChange={this.inputChangeHandler}
-              className={this.state.validInputs.phone ? 'HasError' : null}
+              // className={this.state.validInputs.phone ? null : 'HasError'}
               placeholder="(xxx)-xxx-xxxx"
               //pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               autoComplete="false"
-              required
+              // onFocus={() => {
+              //   const validInputs = this.state.validInputs;
+              //   // reset the error
+              //   validInputs.phone = true;
+              //   this.setState({ noErrors: true, validInputs });
+              // }}
             />
           </FormGroup>
+          <div>
+            {this.state.validInputs.address
+              ? null
+              : this.invalidFeedback('Number')}
+          </div>
           <FormGroup>
             <label htmlFor="incoming">Incoming Transaction Limit</label>
             <input
@@ -209,10 +222,21 @@ class App extends Component {
               name="incoming"
               value={this.state.incoming}
               onChange={this.inputChangeHandler}
-              className={this.state.validInputs.incoming ? 'HasError' : null}
+              // className={this.state.validInputs.incoming ? null : 'HasError'}
               placeholder="0.000 ETH"
+              // onFocus={() => {
+              //   const validInputs = this.state.validInputs;
+              //   // reset the error
+              //   validInputs.incoming = true;
+              //   this.setState({ noErrors: true, validInputs });
+              // }}
             />
           </FormGroup>
+          <div>
+            {this.state.validInputs.address
+              ? null
+              : this.invalidFeedback('Amount')}
+          </div>
           <FormGroup>
             <label htmlFor="outgoing">Outgoing Transaction Limit</label>
             <input
@@ -220,15 +244,23 @@ class App extends Component {
               name="outgoing"
               value={this.state.outgoing}
               onChange={this.inputChangeHandler}
-              className={this.state.validInputs.outgoing ? 'HasError' : null}
+              // className={this.state.validInputs.outgoing ? null : 'HasError'}
               placeholder="0.000 ETH"
+              // onFocus={() => {
+              //   const validInputs = this.state.validInputs;
+              //   // reset the error
+              //   validInputs.outgoing = true;
+              //   this.setState({ noErrors: true, validInputs });
+              // }}
             />
           </FormGroup>
-          <FormGroup>
-            <Err errors={this.state.foundErrors}>Fix the errors!</Err>
-          </FormGroup>
+          <div>
+            {this.state.validInputs.address
+              ? null
+              : this.invalidFeedback('Amount')}
+          </div>
+          <Button className="mt-3">Track</Button>
         </Form>
-        <Button>Track</Button>
       </Wrapper>
     );
   }

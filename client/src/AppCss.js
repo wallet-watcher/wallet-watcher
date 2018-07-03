@@ -17,20 +17,20 @@ export const Intro = styled.div`
 `;
 
 export const Form = styled.form`
-  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const FormGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   max-width: 600px;
   label {
     margin-right: 1rem;
-  }
-
-  .HasError {
-    border: 1px solid red;
   }
 `;
 
@@ -48,16 +48,4 @@ export const Button = styled.button`
     background-color: #d60d90;
     cursor: pointer;
   }
-`;
-
-export const Err = styled.div`
-  display: ${props => (props.errors === true ? 'flex' : 'none')};
-  justify-content: center;
-  align-items: center;
-  color: red;
-  font-weight: 500;
-  width: 250px;
-  height: 40px;
-  border-radius: 10px;
-  border: 1px solid red;
 `;
