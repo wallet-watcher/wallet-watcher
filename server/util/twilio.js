@@ -6,7 +6,8 @@ const { fromSms } = twilio;
 function sendIncreaseSMS(address, walletBalance, transAmount, toSms) {
   return client.messages
     .create({
-      body: `\nALERT: ${address} \n Has Increased by ${transAmount}. Balance is now: ${walletBalance}`,
+      body: `\nALERT: ${address} \n Has Increased. Your Balance is now: ${walletBalance /
+        1000000000000000000} ETH`,
       to: toSms, // Text this number
       from: fromSms // From a valid Twilio number
     })
@@ -14,7 +15,6 @@ function sendIncreaseSMS(address, walletBalance, transAmount, toSms) {
 }
 
 function sendWelcomeSMS(address, toSms) {
-
   return client.messages
     .create({
       body: `\nYou are now monitoring address: ${address} \n `,
@@ -27,7 +27,8 @@ function sendWelcomeSMS(address, toSms) {
 function sendDecreaseSMS(address, walletBalance, transAmount, toSms) {
   return client.messages
     .create({
-      body: `\nALERT: ${address} \n Has Decreased by ${transAmount}. Balance is now: ${walletBalance}`,
+      body: `\nALERT: ${address} \n Has Decreased. Your Balance is now: ${walletBalance /
+        1000000000000000000} ETH`,
       to: toSms, // Text this number
       from: fromSms // From a valid Twilio number
     })
@@ -39,3 +40,5 @@ module.exports = {
   sendDecreaseSMS,
   sendWelcomeSMS
 };
+
+// sendIncreaseSMS("122222", "41613131059259259", "111", "+16286008772");
