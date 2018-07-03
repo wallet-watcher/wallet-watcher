@@ -1,9 +1,11 @@
 const typeDefs = `
-    type User { 
+    type User {
         _id: String!,
         address: String!,
         number: Int!,
-        balance: Int!
+        balance: Int!,
+        incoming: Float!,
+        outgoing: Float!
     }
 
     type Query {
@@ -12,7 +14,7 @@ const typeDefs = `
     }
 
     type Mutation {
-        createUser(address: String, number: String, balance: Int): User
+        createUser(address: String, number: String, balance: Int, incoming: Float, outgoing: Float): User
     }
 
     schema {
