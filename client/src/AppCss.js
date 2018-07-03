@@ -5,6 +5,13 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media only screen and (min-width: 600px) {
+    margin-top: 10vh;
+  }
+  @media only screen and (min-width: 800px) {
+    margin-top: 15vh;
+  }
 `;
 
 export const Intro = styled.div`
